@@ -7,7 +7,6 @@ import (
 	"github.com/alicebob/miniredis/v2"
 	"github.com/glebarez/sqlite"
 	"github.com/go-redis/redis/v8"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/roshankumar0036singh/auth-server/internal/config"
 	"github.com/roshankumar0036singh/auth-server/internal/models"
 	"github.com/roshankumar0036singh/auth-server/internal/repository"
@@ -51,8 +50,10 @@ func SetupIntegrationTest(t *testing.T) (*service.AuthService, *gorm.DB, *minire
 		&models.VerificationToken{},
 		&models.PasswordResetToken{},
 		&models.AuditLog{},
+		&models.OAuthAccessToken{},
 	)
 	assert.NoError(t, err)
+	assert.NoError(t, db.Exec("DELETE FROM oauth_access_tokens").Error)
 
 	// 2. Miniredis
 	mr, err := miniredis.Run()
